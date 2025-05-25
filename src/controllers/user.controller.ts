@@ -22,7 +22,9 @@ export const signup = async (
 		if(!name || !password || !email) throw new AppError("All fields are required",400);
 		const isExist=await User.findOne({email});
 		if(isExist) throw new AppError("user already exists",400);
-		const user=new User({name,email,password});
+		const user=await User.create({name,email,password});
+		await user.save();
+		if(!user) throw new AppError("User creation failed",500);
 		const authToken=await userAuth.createToken({id:user._id,email:user.email,name:user.name},100);
 		response(res,201,"user created sucesssfully",{user,authToken:authToken});
 	} catch (err) {
@@ -46,8 +48,8 @@ export const login=async(req:Request,res:Response,next:NextFunction)=>{
 	   const user=await User.findOne({email}).select("+password");
 	   if(!user) throw new AppError("User not found",404);
 	   if(user.password!==password) throw new AppError("Invalid credentials",401);
-	   const authToken=await userAuth.createToken({id:user._id,email:user.email,name:user.name},100);
-	   response(res,200,"Login successful",{user,authToken:authToken});
+	   const authToken=await userAuth.createToken({userId:user._id,email:user.email,name:user.name},100);
+	   response(res,200,"Login successful",{authToken:authToken});
    } catch (err) {
 	   next(err)
    }

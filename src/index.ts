@@ -7,6 +7,7 @@ import response from "./utils/response";
 import errorHandler from "./middlewares/error.middleware";
 import apolloServer from "./config/apolloServer";
 import { expressMiddleware } from "@as-integrations/express5";
+import userAuth from "./auth";
 
 const app = express();
 
