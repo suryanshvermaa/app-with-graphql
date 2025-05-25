@@ -7,7 +7,7 @@ import response from "./utils/response";
 import errorHandler from "./middlewares/error.middleware";
 import apolloServer from "./config/apolloServer";
 import { expressMiddleware } from "@as-integrations/express5";
-import userAuth from "./auth";
+import graphqlContext from "./graphql/auth/context";
 
 const app = express();
 
@@ -41,7 +41,9 @@ app.use(errorHandler);
 
 const startApolloServer=async()=>{
 	await apolloServer.start();
-	app.use("/graphql",expressMiddleware(apolloServer));
+	app.use("/graphql",expressMiddleware(apolloServer,{
+		context:graphqlContext
+	}));
 }
 startApolloServer();
 const port = process.env.PORT || 3000;

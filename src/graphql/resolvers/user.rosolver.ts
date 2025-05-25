@@ -1,13 +1,23 @@
 import User from "../../models/user.model"
+interface IContext{
+    userId?: string;
+}
 const userResolver={
     Query:{
         users:async()=>await User.find().limit(10)
     },
     Mutation:{
-        updatePassword:async(_:unknown, { _id, password ,prevPassword }: { _id: string, password: string,prevPassword:string })=>{
-            const user = await User.findById(_id);
+        updatePassword:async(_:unknown, {password ,prevPassword }: { password: string,prevPassword:string },context:IContext)=>{
+            const { userId } = context;
+            if (!userId) {
+                throw new Error("Unauthorized");
+            }
+            const user = await User.findById(userId);
             if (!user) {
-                return "User not found";
+                throw new Error("User not found");
+            }
+            if(user.password !== prevPassword){
+                throw new Error("Previous password is incorrect");
             }
             user.password = password;
             await user.save();

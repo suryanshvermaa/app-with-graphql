@@ -11,7 +11,7 @@ type Query{
     users: [User]
 }
 type Mutation{
-    updatePassword(_id: String!, password: String!,prevPassword:String): User
+    updatePassword(password: String!,prevPassword:String): User
 }
 `
 export default userSchema;
