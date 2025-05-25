@@ -5,6 +5,8 @@ import dbConnect from "./config/db";
 import cors from "cors";
 import response from "./utils/response";
 import errorHandler from "./middlewares/error.middleware";
+import apolloServer from "./config/apolloServer";
+import { expressMiddleware } from "@as-integrations/express5";
 
 const app = express();
 
@@ -36,6 +38,11 @@ app.get("/health", (req: Request, res: Response, next: NextFunction) => {
  */
 app.use(errorHandler);
 
+const startApolloServer=async()=>{
+	await apolloServer.start();
+	app.use("/graphql",expressMiddleware(apolloServer));
+}
+startApolloServer();
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log("server is running on port", port);

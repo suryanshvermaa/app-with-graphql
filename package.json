@@ -16,10 +16,12 @@
 	"license": "ISC",
 	"dependencies": {
 		"@apollo/server": "^4.12.1",
+		"@as-integrations/express5": "^1.0.0",
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
 		"graphql": "^16.11.0",
+		"jwt-auth-pack": "^1.0.4",
 		"mongoose": "^8.14.3"
 	},
 	"devDependencies": {
